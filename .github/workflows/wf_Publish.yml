@@ -1,0 +1,17 @@
+name: "Publish"
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish Module to PowerShell Gallery
+        uses: pcgeek86/publish-powershell-module-action@v20
+        id: publish-module
+        with:
+          NuGetApiKey: ${{ secrets.POWERSHELLGALLERY }}
+          ModulePath: ${{ vars.MODULEPATH }}
