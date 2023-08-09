@@ -2,7 +2,7 @@
 Module Name: TrustyTools
 Module Guid: 5828e831-4cc3-44b3-9192-9b791bf0ef62
 Download Help Link: NA
-Help Version: 0.0.1
+Help Version: 1.0.0
 Locale: en-US
 ---
 
@@ -14,6 +14,9 @@ A collection of handy tools
 ### [Compare-ADMemberOf](Compare-ADMemberOf.md)
 Compares the groups that 2 AD objects are members of
 
+### [Convert-Date](Convert-Date.md)
+Converts date/timestamp to clean format
+
 ### [ConvertTo-Case](ConvertTo-Case.md)
 Converts the case of a string
 
@@ -22,9 +25,6 @@ Converts string to NATO phonetic alphabet
 
 ### [Get-ADMemberOf](Get-ADMemberOf.md)
 Displays a list of the groups the object (User/Computer) is a member of.
-
-### [Get-CleanDate](Get-CleanDate.md)
-Converts date/timestamp to clean format
 
 ### [Get-Confirmation](Get-Confirmation.md)
 Prompt for confirmation

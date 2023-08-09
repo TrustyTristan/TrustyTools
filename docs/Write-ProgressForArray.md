@@ -23,20 +23,24 @@ Allows you to quickly use Write-Progress in the shell.
 
 ### EXAMPLE 1
 ```
-Define the input array
-$Array = 1, 2, 3, 4, 5
-Define the command to be executed on each object in the array
-$Command = {
-    param($Object)
-    # Do something with $Object
-    $command = {param($object);$manager = Get-ADUser $object -Properties Manager| %{if (![string]::IsNullOrEmpty($_.Manager)){Get-aduser $_.Manager -Properties GivenName, Surname}}|%{Write-Host "Manager for $object is: $($_.GivenName) $($_.Surname)"}}
-}
-Write-ProgressForArray -Array $Array -Command $Command
+Get total execution time
+C:\PS> Write-ProgressForArray -Array 'mail@box.com','box@mail.com' -Command {Set-Mailbox -HiddenFromAddressListsEnabled $true}
 ```
 
 ### EXAMPLE 2
 ```
-Another example of how to use this cmdlet
+Define the input array
+C:\PS> $Array = @('user1','user2','user3')
+Define the command to be executed on each object in the array
+C:\PS> $Command = {Get-AdUser -Properties Manager -OutVariable a | %{$m = Get-Aduser $_.Manager;if($m){Write-Host $a.GivenName $a.Surname "REPORTS TO" $m.GivenName $m.Surname}} | Out-Host}
+C:\PS> Write-ProgressForArray -Array $Array -Command $Command
+```
+
+### EXAMPLE 3
+```
+Get total execution time
+C:\PS> Write-ProgressForArray -Array $Array -Command $Command -InformationAction Continue
+Executed in: 0 Hours 4 Minutes 3 Seconds 446 Milliseconds
 ```
 
 ## PARAMETERS
