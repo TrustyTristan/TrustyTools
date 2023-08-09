@@ -12,7 +12,7 @@
 RootModule = 'TrustyTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '1.0.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -73,8 +73,8 @@ FunctionsToExport = @(
     "Compare-ADMemberOf",
     "ConvertTo-Case",
     "ConvertTo-Nato",
+    "Convert-Date",
     "Get-ADMemberOf",
-    "Get-CleanDate",
     "Get-Confirmation",
     "Get-FullName",
     "Get-LAPS",
@@ -91,8 +91,8 @@ CmdletsToExport = @(
     "Compare-ADMemberOf",
     "ConvertTo-Case",
     "ConvertTo-Nato",
+    "Convert-Date",
     "Get-ADMemberOf",
-    "Get-CleanDate",
     "Get-Confirmation",
     "Get-FullName",
     "Get-LAPS",
