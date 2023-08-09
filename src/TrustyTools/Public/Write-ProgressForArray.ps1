@@ -5,18 +5,18 @@
 .DESCRIPTION
     Allows you to quickly use Write-Progress in the shell.
 .EXAMPLE
-    Define the input array
-    $Array = 1, 2, 3, 4, 5
-    Define the command to be executed on each object in the array
-    $Command = {
-        param($Object)
-        # Do something with $Object
-        $command = {param($object);$manager = Get-ADUser $object -Properties Manager| %{if (![string]::IsNullOrEmpty($_.Manager)){Get-aduser $_.Manager -Properties GivenName, Surname}}|%{Write-Host "Manager for $object is: $($_.GivenName) $($_.Surname)"}}
-    }
-    Write-ProgressForArray -Array $Array -Command $Command
+    Get total execution time
+    C:\PS> Write-ProgressForArray -Array 'mail@box.com','box@mail.com' -Command {Set-Mailbox -HiddenFromAddressListsEnabled $true}
 .EXAMPLE
-    C:\PS>
-    Another example of how to use this cmdlet
+    Define the input array
+    C:\PS> $Array = @('user1','user2','user3')
+    Define the command to be executed on each object in the array
+    C:\PS> $Command = {Get-AdUser -Properties Manager -OutVariable a | %{$m = Get-Aduser $_.Manager;if($m){Write-Host $a.GivenName $a.Surname "REPORTS TO" $m.GivenName $m.Surname}} | Out-Host}
+    C:\PS> Write-ProgressForArray -Array $Array -Command $Command
+.EXAMPLE
+    Get total execution time
+    C:\PS> Write-ProgressForArray -Array $Array -Command $Command -InformationAction Continue
+    Executed in: 0 Hours 4 Minutes 3 Seconds 446 Milliseconds
 .PARAMETER Array
     Specifies the array of items to be processed
 .PARAMETER Command
@@ -57,17 +57,22 @@ function Write-ProgressForArray {
     }
 
     PROCESS {
-        $processDuration = Measure-Command -Expression {
+        $ProcessDuration = Measure-Command -Expression {
             for ($i = 0; $i -lt $ItemCount; $i++) {
-                $percentComplete = ($i + 1) / $ItemCount * 100
-                Write-Progress -Activity $Activity -Status "Processing: $($Array[$i]), $i of $ItemCount" -PercentComplete $percentComplete
-                & $Command $Array[$i]
+                $PercentComplete = ($i + 1) / $ItemCount * 100
+                Write-Progress -Activity $Activity -Status "$i/${ItemCount}: $($Array[$i])" -PercentComplete $PercentComplete
+                $ObjectType = $Array[$i].GetType()
+                if ($ObjectType.Name -eq 'String') {
+                    "$($Array[$i])" | Invoke-Command -Command $Command
+                } else {
+                    $Array[$i] | Invoke-Command -Command $Command
+                }
             }
         }
     }
 
     END {
-        Write-Information "Executed in: $($processDuration.Hours) Hours $($processDuration.Minutes) Minutes $($processDuration.Seconds) Seconds $($processDuration.Milliseconds) Milliseconds"
+        Write-Information "Executed in: $($ProcessDuration.Hours) Hours $($ProcessDuration.Minutes) Minutes $($ProcessDuration.Seconds) Seconds $($ProcessDuration.Milliseconds) Milliseconds"
     }
 
 }
