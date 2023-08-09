@@ -37,25 +37,13 @@ function Get-ADMemberOf {
     )
 
     PROCESS {
-        function Get-MemberOf {
-            param (
-                [Parameter(Mandatory = $true,
-                    HelpMessage = 'Specify the samAccountName')]
-                [ValidateNotNullOrEmpty()]
-                [string]$Identity,
-
-                [Parameter(Mandatory = $false,
-                    HelpMessage = 'Domain controller')]
-                [ValidateNotNullOrEmpty()]
-                [string]$Server = $env:USERDNSDOMAIN
-            )
-            return (Get-ADObject -Filter "samAccountName -eq $Identity" -Properties Memberof -Server $Server).Memberof
-        }
-        $MemberOfResult = Get-MemberOf -Identity $Identity -Server $Server
-        if ($MemberOfResult) {
-            return Get-NameFromCN $MemberOfResult
-        } else {
-            return $null
+        if ($Identity) {
+            $MemberOfResult = (Get-ADObject -Filter {samAccountName -eq $Identity} -Properties Memberof -Server $Server).Memberof
+            if ($MemberOfResult) {
+                return Get-NameFromCN $MemberOfResult
+            } else {
+                return $null
+            }
         }
     }
 
