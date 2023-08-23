@@ -18,15 +18,18 @@ InModuleScope 'TrustyTools' {
             $WarningPreference = 'SilentlyContinue'
             $ErrorActionPreference = 'SilentlyContinue'
             function Get-ADComputer {
-                "ADComputer"
+                return "ADComputer"
             }
         } #beforeAll
         Context "When valid computer and server parameters are provided" {
             BeforeEach {
                 Mock Get-ADComputer {
-                    return [PSCustomObject]@{
-                        Name = 'Computer1';
-                        'ms-Mcs-AdmPwd' = 'gkQWD^5IVqNM.JU4';
+                    param($Identity)
+                    if ($Identity -eq 'Computer1') {
+                        return [PSCustomObject]@{
+                            Name = 'Computer1';
+                            'ms-Mcs-AdmPwd' = 'superpassword1';
+                        }
                     }
                 }
             }
@@ -34,7 +37,7 @@ InModuleScope 'TrustyTools' {
                 $result = Get-LAPS -Computer 'Computer1'
                 $result.Count | Should -Be 1
                 $result.Name | Should -Be 'Computer1'
-                $result.Password | Should -Be 'gkQWD^5IVqNM.JU4'
+                $result.Password | Should -Be 'superpassword1'
             }
 
             Context "When multiple computers are provided" {

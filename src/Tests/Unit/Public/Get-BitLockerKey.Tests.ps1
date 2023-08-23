@@ -33,18 +33,20 @@ InModuleScope 'TrustyTools' {
                     }
                 }
                 Mock Get-ADObject {
-                    return [PSCustomObject]@{
+                    $adobject = [System.Collections.Generic.List[System.Object]]@()
+                    $adobject.Add([PSCustomObject]@{
                         'msFVE-RecoveryPassword' = '1234567890';
                         'Created' = '2023-08-14T12:34:56'
-                    }
+                    })
+                    return $adobject
                 }
             }
             It "Should return an array of BitLocker keys" {
                 $result = Get-BitLockerKey -Computer 'Computer1'
                 $result.Count | Should -Be 1
-                $result[0].Name | Should -Be 'Computer1'
-                $result[0].Date | Should -Be '2023/08/14 12:34:56 PM'
-                $result[0].Key | Should -Be '1234567890'
+                $result.Name | Should -Be 'Computer1'
+                $result.Date | Should -Be '2023/08/14 12:34:56 PM'
+                $result.Key | Should -Be '1234567890'
             }
 
             Context "When multiple keys are provided" {
