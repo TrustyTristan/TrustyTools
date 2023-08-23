@@ -52,8 +52,8 @@ function Compare-ADMemberOf {
     }
 
     PROCESS {
-        if ( $ReferenceObjectGroups.Keys -and $DifferenceObjectGroups.Keys ) {
-            Compare-Object -ReferenceObject $ReferenceObjectGroups.Keys -DifferenceObject $DifferenceObjectGroups.Keys -IncludeEqual |
+        if ( $ReferenceObjectGroups -and $DifferenceObjectGroups ) {
+            Compare-Object -ReferenceObject $ReferenceObjectGroups.Name -DifferenceObject $DifferenceObjectGroups.Name -IncludeEqual |
                 ForEach-Object {
                     if ($_.SideIndicator -eq '=>') {
                         $Comparison.Add(
@@ -81,8 +81,9 @@ function Compare-ADMemberOf {
                         )
                     }
                 }
-        } elseif ( $ReferenceObjectGroups.Keys ) {
-            $ReferenceObjectGroups.Keys |
+        } elseif ( $ReferenceObjectGroups ) {
+            Write-Warning -Message "Could not retrieve `'$DifferenceObject`'" -WarningAction Continue
+            $ReferenceObjectGroups.Name |
                 ForEach-Object {
                     $Comparison.Add(
                         [PSCustomObject]@{
@@ -92,8 +93,9 @@ function Compare-ADMemberOf {
                         }
                     )
                 }
-        } elseif ( $DifferenceObjectGroups.Keys ) {
-            $DifferenceObjectGroups.Keys |
+        } elseif ( $DifferenceObjectGroups ) {
+            Write-Warning -Message "Could not retrieve `'$ReferenceObject`'" -WarningAction Continue
+            $DifferenceObjectGroups.Name |
                 ForEach-Object {
                     $Comparison.Add(
                         [PSCustomObject]@{
