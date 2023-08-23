@@ -13,7 +13,7 @@ Displays a list of the groups the object (User/Computer) is a member of.
 ## SYNTAX
 
 ```
-Get-ADMemberOf [-Identity] <String> [[-Server] <String>] [<CommonParameters>]
+Get-ADMemberOf [-Identity] <String> [-Server <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -47,7 +47,7 @@ Aliases:
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -62,7 +62,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: $env:USERDNSDOMAIN
 Accept pipeline input: False
 Accept wildcard characters: False

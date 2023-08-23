@@ -26,6 +26,9 @@ Converts string to NATO phonetic alphabet
 ### [Get-ADMemberOf](Get-ADMemberOf.md)
 Displays a list of the groups the object (User/Computer) is a member of.
 
+### [Get-BitLockerKey](Get-BitLockerKey.md)
+Gets the BitLocker keys
+
 ### [Get-Confirmation](Get-Confirmation.md)
 Prompt for confirmation
 

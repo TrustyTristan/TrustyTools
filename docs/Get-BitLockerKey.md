@@ -5,26 +5,25 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LAPS
+# Get-BitLockerKey
 
 ## SYNOPSIS
-Gets Local Admin password.
+Gets the BitLocker keys
 
 ## SYNTAX
 
 ```
-Get-LAPS [-Computer] <String[]> [[-Server] <String>] [<CommonParameters>]
+Get-BitLockerKey [-Computer] <String[]> [[-Server] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Gets Local Admin password.
+Gets the BitLocker keys from the active directory store
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LocalAdmin TRUSTY69420
-Returns the Local Admin password for the computer.
+Get-BitLockerKey -Computer DESKTOP-69420
 ```
 
 ## PARAMETERS

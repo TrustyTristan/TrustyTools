@@ -13,7 +13,7 @@ Converts date/timestamp to clean format
 ## SYNTAX
 
 ```
-Convert-Date [-InputDate] <String> [[-Format] <String>] [<CommonParameters>]
+Convert-Date [-InputDate] <String[]> [-Format <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,13 +24,13 @@ Can accept unix timestamp for those using 5.2 or older.
 
 ### EXAMPLE 1
 ```
-Convert-Date -Input '2023/07/17 10:43' -Format 'yyyyMMdd'
+Convert-Date -InputDate '2023/07/17 10:43' -Format 'yyyyMMdd'
 20230717
 ```
 
 ### EXAMPLE 2
 ```
-Convert-Date -Input 1689590580 -Format 'yyyy/MM/dd hh:mm'
+Convert-Date -InputDate 1689590580 -Format 'yyyy/MM/dd hh:mm'
 2023/07/17 10:43
 ```
 
@@ -40,14 +40,14 @@ Convert-Date -Input 1689590580 -Format 'yyyy/MM/dd hh:mm'
 Helpful Message
 
 ```yaml
-Type: String
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -60,7 +60,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: Yyyy/MM/dd
 Accept pipeline input: False
 Accept wildcard characters: False
