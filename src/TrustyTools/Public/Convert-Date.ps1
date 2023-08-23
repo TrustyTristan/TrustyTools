@@ -19,15 +19,16 @@
 .COMPONENT
     TrustyTools
 #>
-# AWS's unknown date causes issues with Excel.. AD date format can vary for some reason.
 function Convert-Date {
 
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline = $true,
             HelpMessage = 'Helpful Message')]
-        [ValidateNotNullOrEmpty()]
-        [string]$InputDate,
+        [AllowEmptyString()]
+        [string[]]$InputDate,
 
         [Parameter(Mandatory = $false,
             HelpMessage = 'Helpful Message')]
@@ -41,17 +42,59 @@ function Convert-Date {
             '01/01/0001 00:00'
             '01/01/1901 00:00'
         )
+        $regexMMddyyyy = '(?<month>\d{1,2})[-/](?<day>\d{1,2})[-/](?<year>\d{4})'
+        $regexyyyyddMM = '(?<year>\d{4})[-/](?<day>\d{1,2})[-/](?<month>\d{1,2})'
+        $regexddMMyyyy = '(?<day>\d{1,2})[-/](?<month>\d{1,2})[-/](?<year>\d{4})'
+        $regexyyyyMMdd = '(?<year>\d{4})[-/](?<month>\d{1,2})[-/](?<day>\d{1,2})'
+
+        function Get-RegexDate {
+            param (
+                [string]$InputDate
+            )
+
+            if ( ([cultureinfo]::CurrentCulture.DateTimeFormat.ShortDatePattern -split '/')[0] -eq 'd' ) {
+                # Convert From Freedom Date
+                if ($InputDate -match $regexMMddyyyy) {
+                    $day = $matches.day
+                    $month = $matches.month
+                    $year = $matches.year
+                    return $InputDate -replace $matches.0,"$year/$month/$day"
+                } elseif ($DateString -match $regexyyyyddMM) {
+                    $day = $matches.day
+                    $month = $matches.month
+                    $year = $matches.year
+                    return $InputDate -replace $matches.0,"$year/$month/$day"
+                }
+            } elseif ( ([cultureinfo]::CurrentCulture.DateTimeFormat.ShortDatePattern -split '/')[0] -eq 'M' ) {
+                # Convert From Australian Date
+                if ($InputDate -match $regexddMMyyyy) {
+                    $day = $matches.day
+                    $month = $matches.month
+                    $year = $matches.year
+                    return $InputDate -replace $matches.0,"$year/$month/$day"
+                } elseif ($DateString -match $regexyyyyMMdd) {
+                    $day = $matches.day
+                    $month = $matches.month
+                    $year = $matches.year
+                    return $InputDate -replace $matches.0,"$year/$month/$day"
+                }
+            }
+        }
     }
 
     PROCESS {
-        if ( (-not [string]::IsNullOrEmpty($InputDate)) -and ( $nullDates -notcontains $InputDate ) ) {
-            if ( $InputDate -match '^\d{10}' ) {
-                return Get-Date ( $unixDate + ([System.timeSpan]::FromSeconds( ("$InputDate").substring(0,10) )) ) -Format $Format
-            } else {
-                return Get-Date $InputDate -Format $Format
+        foreach ($DateString in $InputDate) {
+            if ( (-not [string]::IsNullOrEmpty($DateString)) -and ( $nullDates -notcontains $DateString ) ) {
+                if ( $DateString -match '^\d{10}' ) {
+                    return Get-Date ( $unixDate + ([System.timeSpan]::FromSeconds( ("$DateString").substring(0,10) )) ) -Format $Format
+                } else {
+                    try {
+                        return Get-Date $DateString -Format $Format -ErrorAction Stop
+                    } catch {
+                        return Get-Date (Get-RegexDate $DateString) -Format $Format -ErrorAction Stop
+                    }
+                }
             }
-        } else {
-            return ''
         }
     }
 
