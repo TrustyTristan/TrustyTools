@@ -48,5 +48,11 @@ InModuleScope 'TrustyTools' {
                 { Convert-Date $null } | Should -Throw
             }
         }
+        Context "Empty input" {
+            It "Should return nothing" {
+                $Output = Convert-Date ''
+                $Output | Should -BeNullOrEmpty
+            }
+        }
     }
 }

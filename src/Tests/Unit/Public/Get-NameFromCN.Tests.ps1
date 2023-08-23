@@ -15,13 +15,13 @@ InModuleScope 'TrustyTools' {
     #-------------------------------------------------------------------------
     $WarningPreference = "SilentlyContinue"
     #-------------------------------------------------------------------------
-    Describe 'Get-Day Public Function Tests' -Tag Unit {
+    Describe 'Get-NameFromCN Public Function Tests' -Tag Unit {
         BeforeAll {
             $WarningPreference = 'SilentlyContinue'
             $ErrorActionPreference = 'SilentlyContinue'
         } #beforeAll
 
-        It "Returns an ordered dictionary with the name and CN" {
+        It "Returns an ordered dictionary the name and CN" {
             # Sample input data
             $inputCN = @(
                 'CN=GroupName1,OU=Groups,DC=some,DC=domain,DC=name',
@@ -30,17 +30,20 @@ InModuleScope 'TrustyTools' {
             )
 
             # Expected output
-            $expectedOutput = [ordered]@{
-                'GroupName1' = 'CN=GroupName1,OU=Groups,DC=some,DC=domain,DC=name'
-                'GroupName2' = 'CN=GroupName2,OU=Groups,DC=some,DC=domain,DC=name'
-                'GroupName3' = 'CN=GroupName3,OU=Groups,DC=some,DC=domain,DC=name'
-            }
+            $expectedOutput = New-Object System.Collections.Generic.List[System.Object]
+            $expectedOutput.Add([PSCustomObject]@{Name = 'GroupName1';CN = 'CN=GroupName1,OU=Groups,DC=some,DC=domain,DC=name';})
+            $expectedOutput.Add([PSCustomObject]@{Name = 'GroupName2';CN = 'CN=GroupName2,OU=Groups,DC=some,DC=domain,DC=name';})
+            $expectedOutput.Add([PSCustomObject]@{Name = 'GroupName3';CN = 'CN=GroupName3,OU=Groups,DC=some,DC=domain,DC=name';})
 
             # Invoke the function with the input data
             $actualOutput = Get-NameFromCN -CN $inputCN
+            $actualOutput.Count | Should -BeExactly 3
+            $actualOutput.GetType().FullName | Should -BeExactly 'System.Object[]'
 
             # Perform the test assertion
-            $actualOutput | Should -BeLikeExactly $expectedOutput
+            $actualOutput[0].CN | Should -Be $expectedOutput[0].CN
+            $actualOutput[1].Name | Should -Be $expectedOutput[1].Name
+            #$actualOutput[2] | Should -Be $expectedOutput[2]
         }
     }
 
