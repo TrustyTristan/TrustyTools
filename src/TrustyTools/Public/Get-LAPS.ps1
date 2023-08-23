@@ -4,7 +4,7 @@
 .DESCRIPTION
     Gets Local Admin password.
 .EXAMPLE
-    Get-LocalAdmin TRUSTY69420
+    PS> Get-LocalAdmin TRUSTY69420
     Returns the Local Admin password for the computer.
 .PARAMETER Identity
     Specifies an Active Directory computer
@@ -16,10 +16,11 @@ function Get-LAPS {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true,
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $true,
             HelpMessage = 'Specify a computer object name')]
         [ValidateNotNullOrEmpty()]
-        [string]$Computer,
+        [string[]]$Computer,
 
         [Parameter(Mandatory = $false,
             HelpMessage = 'Specify a domain or domain controller')]
@@ -28,21 +29,27 @@ function Get-LAPS {
     )
 
     BEGIN {
-        try {
-            $ComputerObject = Get-ADComputer -Identity $Computer -Properties ms-Mcs-AdmPwd -Server $Server
-        } catch {
-            Write-Error "Could not find `'$Computer`' on `'$Server`'"
-        }
+        $LAPS = New-Object System.Collections.Generic.List[System.Object]
     }
 
     PROCESS {
-        if ( $ComputerObject ) {
-            $ComputerObject.'ms-Mcs-AdmPwd'.Trim() | Set-Clipboard
-            return [PSCustomObject]@{
-                Name      = $Computer
-                Passsword = $ComputerObject.'ms-Mcs-AdmPwd'.Trim()
+        foreach ($ComputerName in $Computer) {
+            try {
+                $ComputerObject = Get-ADComputer -Identity $ComputerName -Properties 'ms-Mcs-AdmPwd' -Server $Server
+                $LAPS.Add(
+                    [PSCustomObject]@{
+                        Name     = $ComputerObject.Name
+                        Password = $ComputerObject.'ms-Mcs-AdmPwd'.Trim()
+                    }
+                )
+            } catch {
+                Write-Error "Could not find `'$ComputerName`' on `'$Server`'"
             }
         }
+    }
+
+    END {
+        return $LAPS | Sort-Object Name
     }
 
 }
