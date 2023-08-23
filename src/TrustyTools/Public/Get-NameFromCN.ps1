@@ -31,12 +31,17 @@ function Get-NameFromCN {
         # Match: GroupName
         # From: CN=GroupName,OU=Groups,DC=some,DC=domain,DC=name
         $RegexPattern = '(?<=^CN=)(.*?)(?=,)'
-        $ConvertedCN = [ordered]@{}
+        $ConvertedCN = New-Object System.Collections.Generic.List[System.Object]
     }
 
     PROCESS {
         $CN | ForEach-Object {
-            $ConvertedCN.Add( [regex]::match($_,$RegexPattern).value, $_ )
+            $ConvertedCN.Add(
+                [PSCustomObject]@{
+                    Name = [regex]::match($_,$RegexPattern).value;
+                    CN   = [string]$_;
+                }
+            )
         }
     }
 
