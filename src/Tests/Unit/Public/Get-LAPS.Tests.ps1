@@ -30,7 +30,7 @@ InModuleScope 'TrustyTools' {
                     }
                 }
             }
-            It "Should return an array of BitLocker keys" {
+            It "Should return an array of passwords" {
                 $result = Get-LAPS -Computer 'Computer1'
                 $result.Count | Should -Be 1
                 $result.Name | Should -Be 'Computer1'
