@@ -2,7 +2,7 @@
 Module Name: TrustyTools
 Module Guid: 5828e831-4cc3-44b3-9192-9b791bf0ef62
 Download Help Link: NA
-Help Version: 1.0.0
+Help Version: 1.1.0
 Locale: en-US
 ---
 
@@ -52,6 +52,9 @@ Helper function to simplify creating dynamic parameters
 
 ### [New-StoredCredential](New-StoredCredential.md)
 Saves credential as .cred
+
+### [Write-LogMessage](Write-LogMessage.md)
+Writes log message to file and host
 
 ### [Write-ProgressForArray](Write-ProgressForArray.md)
 Write out the progress for the processing of an array
