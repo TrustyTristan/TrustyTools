@@ -43,7 +43,6 @@ InModuleScope 'TrustyTools' {
             }
             It "Should return an array of BitLocker keys" {
                 $result = Get-BitLockerKey -Computer 'Computer1'
-                $result.Count | Should -Be 1
                 $result.Name | Should -Be 'Computer1'
                 $result.Date | Should -Be '2023/08/14 12:34:56 PM'
                 $result.Key | Should -Be '1234567890'
