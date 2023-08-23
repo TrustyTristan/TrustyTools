@@ -26,6 +26,8 @@ function Get-ADMemberOf {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true,
+            Position = 0,
+            ValueFromPipeline = $true,
             HelpMessage = 'Specify a Active Directory object samAccountName. If the object is a computer append $')]
         [ValidateNotNullOrEmpty()]
         [string]$Identity,
@@ -37,12 +39,10 @@ function Get-ADMemberOf {
     )
 
     PROCESS {
-        if ($Identity) {
+        if ( $Identity ) {
             $MemberOfResult = (Get-ADObject -Filter {samAccountName -eq $Identity} -Properties Memberof -Server $Server).Memberof
-            if ($MemberOfResult) {
+            if ( $MemberOfResult ) {
                 return Get-NameFromCN $MemberOfResult
-            } else {
-                return $null
             }
         }
     }
