@@ -27,8 +27,14 @@ function Convert-Date {
             Position = 0,
             ValueFromPipeline = $true,
             HelpMessage = 'Helpful Message')]
-        [AllowEmptyString()]
-        [string[]]$InputDate,
+        [ValidateNotNullOrEmpty()]
+        [ValidateScript({
+                if ($_ -is [array] -and $_.Count -eq 0) {
+                    throw "Array cannot be empty."
+                }
+                $true
+            })]
+        $InputDate,
 
         [Parameter(Mandatory = $false,
             HelpMessage = 'Helpful Message')]
@@ -85,7 +91,9 @@ function Convert-Date {
     PROCESS {
         foreach ($DateString in $InputDate) {
             if ( (-not [string]::IsNullOrEmpty($DateString)) -and ( $nullDates -notcontains $DateString ) ) {
-                if ( $DateString -match '^\d{10}' ) {
+                if ( $InputDate.GetType().Name -eq 'DateTime' ) {
+                    return Get-Date $InputDate -Format $Format -ErrorAction Stop
+                } elseif ( $DateString -match '^\d{10}' ) {
                     return Get-Date ( $unixDate + ([System.timeSpan]::FromSeconds( ("$DateString").substring(0,10) )) ) -Format $Format
                 } else {
                     try {

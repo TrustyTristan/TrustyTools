@@ -5,63 +5,41 @@ online version:
 schema: 2.0.0
 ---
 
-# Convert-Date
+# Get-PIMRole
 
 ## SYNOPSIS
-Converts date/timestamp to clean format
+Gets all Entra ID PIM roles for the signed-in user using Microsoft Graph API.
 
 ## SYNTAX
 
 ```
-Convert-Date [-InputDate] <Object> [-Format <String>] [<CommonParameters>]
+Get-PIMRole [-TenantId] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Converts date/timestamp to clean format, will return empty result if date is effectively null or obviously not real.
-Can accept unix timestamp for those using 5.2 or older.
+Stores eligible PIM roles in userprofile for use in "Request-PIMActivation"
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Convert-Date -InputDate '2023/07/17 10:43' -Format 'yyyyMMdd'
-20230717
-```
-
-### EXAMPLE 2
-```
-Convert-Date -InputDate 1689590580 -Format 'yyyy/MM/dd hh:mm'
-2023/07/17 10:43
+Get-PIMRole -Tenant "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+Activate all roles
 ```
 
 ## PARAMETERS
 
-### -InputDate
-Helpful Message
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Format
-Specifies output format
+### -TenantId
+Specifies the Tenant Id
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Named
-Default value: Yyyy/MM/dd
+Required: True
+Position: 1
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -74,7 +52,8 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
-### System.String
 ## NOTES
+Inspiration: Sankara Narayanan M S
+Link: https://github.com/SankaraHQ/PIM-AutoActivator
 
 ## RELATED LINKS

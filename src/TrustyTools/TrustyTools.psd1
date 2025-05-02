@@ -12,7 +12,7 @@
 RootModule = 'TrustyTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.1.0'
+ModuleVersion = '1.2.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -80,12 +80,15 @@ FunctionsToExport = @(
     "Get-FullName",
     "Get-LAPS",
     "Get-NameFromCN",
+    "Get-PIMRole",
     "Get-RandomString",
     "Get-StoredCredential",
+
     "New-DynamicParam",
     "New-StoredCredential",
     "Write-LogMessage",
-    "Write-ProgressForArray"
+    "Write-ProgressForArray",
+    "Request-PIMActivation"
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -100,12 +103,14 @@ CmdletsToExport = @(
     "Get-FullName",
     "Get-LAPS",
     "Get-NameFromCN",
+    "Get-PIMRole",
     "Get-RandomString",
     "Get-StoredCredential",
     "New-DynamicParam",
     "New-StoredCredential",
     "Write-LogMessage",
-    "Write-ProgressForArray"
+    "Write-ProgressForArray",
+    "Request-PIMActivation"
 )
 
 # Variables to export from this module

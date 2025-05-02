@@ -2,7 +2,7 @@
 Module Name: TrustyTools
 Module Guid: 5828e831-4cc3-44b3-9192-9b791bf0ef62
 Download Help Link: NA
-Help Version: 1.1.0
+Help Version: 1.2.0
 Locale: en-US
 ---
 
@@ -41,6 +41,9 @@ Gets Local Admin password.
 ### [Get-NameFromCN](Get-NameFromCN.md)
 Returns the name and CN
 
+### [Get-PIMRole](Get-PIMRole.md)
+Gets all Entra ID PIM roles for the signed-in user using Microsoft Graph API.
+
 ### [Get-RandomString](Get-RandomString.md)
 Gets a random string
 
@@ -52,6 +55,9 @@ Helper function to simplify creating dynamic parameters
 
 ### [New-StoredCredential](New-StoredCredential.md)
 Saves credential as .cred
+
+### [Request-PIMActivation](Request-PIMActivation.md)
+Activates Entra ID PIM eligible roles for the signed-in user using Microsoft Graph API.
 
 ### [Write-LogMessage](Write-LogMessage.md)
 Writes log message to file and host
