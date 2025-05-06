@@ -2,7 +2,7 @@
 Module Name: TrustyTools
 Module Guid: 5828e831-4cc3-44b3-9192-9b791bf0ef62
 Download Help Link: NA
-Help Version: 1.3.0
+Help Version: 1.3.1
 Locale: en-US
 ---
 

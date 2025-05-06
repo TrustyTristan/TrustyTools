@@ -144,11 +144,12 @@ function Request-PIMActivation {
                     }
                 }
             }
-            # Have to do this for some reason, mostly mac reasons.
-            $JsonActivationParams = $activationParams | ConvertTo-Json -Depth 5
+            # Have had to convert to json before, seems to be fixed with msgraph 27
+            Write-Debug "Activation Params`n"
+            Write-Debug $ActivationParams
 
             try {
-                New-MgRoleManagementDirectoryRoleAssignmentScheduleRequest -BodyParameter $JsonActivationParams -ErrorAction Stop | Out-Null
+                New-MgRoleManagementDirectoryRoleAssignmentScheduleRequest -BodyParameter $ActivationParams -ErrorAction Stop | Out-Null
                 Write-Information -MessageData "Activated role: $($selectedRole.RoleName)" -InformationAction Continue
             } catch {
                 Write-Error "Unable to activate role: $($selectedRole.RoleName)"
