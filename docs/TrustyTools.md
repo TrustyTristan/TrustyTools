@@ -2,7 +2,7 @@
 Module Name: TrustyTools
 Module Guid: 5828e831-4cc3-44b3-9192-9b791bf0ef62
 Download Help Link: NA
-Help Version: 1.2.1
+Help Version: 1.3.0
 Locale: en-US
 ---
 
@@ -28,6 +28,9 @@ Displays a list of the groups the object (User/Computer) is a member of.
 
 ### [Get-BitLockerKey](Get-BitLockerKey.md)
 Gets the BitLocker keys
+
+### [Get-CalendarPermission](Get-CalendarPermission.md)
+Get both the calendar folder permissions and if the user is in the book in policy
 
 ### [Get-Confirmation](Get-Confirmation.md)
 Prompt for confirmation
