@@ -44,7 +44,7 @@ function Get-PIMRole {
         # Get user id
         $MgContext = Get-MgContext
         if ( $MgContext ) {
-            Write-Information "`nSuccessfully connected to $($MgContext.AppName)"
+            Write-Information -MessageData "`nSuccessfully connected to $($MgContext.AppName)" -InformationAction Continue
             try {
                 $CurrentUser = Get-MgUser -UserId $MgContext.Account -ErrorAction Stop
             } catch {
@@ -58,7 +58,7 @@ function Get-PIMRole {
 
         # Get all role definitions
         try {
-            Write-Information "Getting all role definitions..."
+            Write-Information -MessageData "Getting all role definitions..." -InformationAction Continue
             $AllRoleDefinitions = Get-MgRoleManagementDirectoryRoleDefinition -ErrorAction Stop
         } catch {
             Write-Error $_.Exception.Message
@@ -66,7 +66,7 @@ function Get-PIMRole {
 
         # Get eligible roles
         try {
-            Write-Information "Getting eligible roles for $($CurrentUser.UserPrincipalName)..."
+            Write-Information -MessageData "Getting eligible roles for $($CurrentUser.UserPrincipalName)..." -InformationAction Continue
             $EligibleRoles = Get-MgRoleManagementDirectoryRoleEligibilityScheduleInstance -Filter "principalId eq '$($CurrentUser.Id)'" -ErrorAction Stop
         } catch {
             Write-Error $_.Exception.Message
@@ -101,6 +101,8 @@ function Get-PIMRole {
 
     END {
         $EligiblePIMRoles | ConvertTo-Json | Out-File -FilePath ( Join-Path -Path $PIMPath -ChildPath eligible_roles.json ) -Force
+        Disconnect-MgGraph | Out-Null
+        Write-Information -MessageData "`nDisconnected from MS Graph.`n" -InformationAction Continue
     }
 
 }

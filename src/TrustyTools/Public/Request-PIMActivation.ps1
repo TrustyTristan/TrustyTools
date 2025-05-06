@@ -89,10 +89,10 @@ function Request-PIMActivation {
 
         if ( -not $All -or -not $Roles ) {
             # Show eligible roles
-            Write-Information "`nEligible Roles:"
+            Write-Information -MessageData "`nEligible Roles:" -InformationAction Continue
             $RoleIndex = 1
             $EligiblePIMRoles | ForEach-Object {
-                Write-Information "$RoleIndex) $($_.RoleName) - $($_.Description)"
+                Write-Information -MessageData "$RoleIndex) $($_.RoleName) - $($_.Description)" -InformationAction Continue
                 $RoleIndex++
             }
 
@@ -102,14 +102,14 @@ function Request-PIMActivation {
                 $selectedIndices = $selectedInput -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^\d+$' }
                 $isValid = $true
 
-                foreach ($index in $selectedIndices) {
-                    if ($index -lt 1 -or $index -gt $EligiblePIMRoles.Count) {
-                        Write-Information "Invalid selection: $index. Please enter valid indices."
+                foreach ( $index in $selectedIndices ) {
+                    if ( $index -lt 1 -or $index -gt $EligiblePIMRoles.Count ) {
+                        Write-Information -MessageData "Invalid selection: $index. Please enter valid indices." -InformationAction Continue
                         $isValid = $false
                         break
                     }
                 }
-            } while (-not $isValid)
+            } while ( -not $isValid )
 
             # Convert to int and subtract 1
             $selectedIndices = $selectedIndices | ForEach-Object { [int]$_ - 1 }
@@ -123,7 +123,7 @@ function Request-PIMActivation {
 
             $SelectedRole = $EligiblePIMRoles[ $index ]
 
-            Write-Information "Activating role: $($selectedRole.RoleName)..."
+            Write-Information -MessageData "Activating role: $($selectedRole.RoleName)..." -InformationAction Continue
 
             $ActivationParams = @{
                 Action           = "selfActivate"
@@ -144,7 +144,7 @@ function Request-PIMActivation {
 
             try {
                 New-MgRoleManagementDirectoryRoleAssignmentScheduleRequest -BodyParameter $JsonActivationParams -ErrorAction Stop | Out-Null
-                Write-Information "Activated role: $($selectedRole.RoleName)"
+                Write-Information -MessageData "Activated role: $($selectedRole.RoleName)" -InformationAction Continue
             } catch {
                 Write-Error "Unable to activate role: $($selectedRole.RoleName)"
                 Write-Error $_.Exception.Message
@@ -155,7 +155,7 @@ function Request-PIMActivation {
 
     END {
         Disconnect-MgGraph | Out-Null
-        Write-Information "`nDisconnected from MS Graph.`n"
+        Write-Information -MessageData "`nDisconnected from MS Graph.`n" -InformationAction Continue
     }
 
 }
