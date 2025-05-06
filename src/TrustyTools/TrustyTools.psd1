@@ -12,7 +12,7 @@
 RootModule = 'TrustyTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.1'
+ModuleVersion = '1.3.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -76,6 +76,7 @@ FunctionsToExport = @(
     "ConvertTo-Nato",
     "Get-ADMemberOf",
     "Get-BitLockerKey",
+    "Get-CalendarPermission",
     "Get-Confirmation",
     "Get-FullName",
     "Get-LAPS",
@@ -83,7 +84,6 @@ FunctionsToExport = @(
     "Get-PIMRole",
     "Get-RandomString",
     "Get-StoredCredential",
-
     "New-DynamicParam",
     "New-StoredCredential",
     "Write-LogMessage",
@@ -99,6 +99,7 @@ CmdletsToExport = @(
     "ConvertTo-Nato",
     "Get-ADMemberOf",
     "Get-BitLockerKey",
+    "Get-CalendarPermission",
     "Get-Confirmation",
     "Get-FullName",
     "Get-LAPS",
