@@ -100,11 +100,16 @@ function Request-PIMActivation {
             do {
                 $selectedInput = Read-Host "`nEnter comma-separated numbers for roles to activate (e.g., 1,3)"
                 $selectedIndices = $selectedInput -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^\d+$' }
-                $isValid = $true
+                if ( $selectedIndices ) {
+                    $isValid = $true
+                } else {
+                    Write-Information -MessageData "Invalid selection: `'$index`'. Please enter valid indices." -InformationAction Continue
+                    $isValid = $false
+                }
 
                 foreach ( $index in $selectedIndices ) {
                     if ( $index -lt 1 -or $index -gt $EligiblePIMRoles.Count ) {
-                        Write-Information -MessageData "Invalid selection: $index. Please enter valid indices." -InformationAction Continue
+                        Write-Information -MessageData "Invalid selection: `'$index`'. Please enter valid indices." -InformationAction Continue
                         $isValid = $false
                         break
                     }
