@@ -37,6 +37,8 @@ function Request-PIMActivation {
             HelpMessage = 'Please incldude the tenant id')]
         [string]$TenantId,
 
+        [Parameter(Mandatory = $false,
+            HelpMessage = 'Specify the name of the role')]
         [array]$Roles,
 
         [Parameter(Mandatory = $true,
@@ -50,8 +52,8 @@ function Request-PIMActivation {
     )
 
     BEGIN {
-        $PIMPath = Join-Path -Path (Split-Path $Profile) -ChildPath "PIMs" -AdditionalChildPath "eligible_roles.json"
-        if ( -not (Test-Path $PIMPath) ) {
+        $PIMPath = Join-Path -Path ( Split-Path $Profile ) -ChildPath "PIMs" -AdditionalChildPath "eligible_roles.json"
+        if ( -not ( Test-Path $PIMPath ) ) {
             Write-Error "No eligible PIM roles found"
             if ( -not $TenantId ) {
                 $TenantId = Read-Host "Enter Tenant Id"
@@ -67,9 +69,16 @@ function Request-PIMActivation {
         }
 
         # Check specified roles
+        $selectedIndices = New-Object System.Collections.Generic.List[System.Object]
         if ( $Roles ) {
             foreach ( $Role in $Roles ) {
-                if ( $EligiblePIMRoles.RoleName -notcontains $Role ) {
+                if ( $EligiblePIMRoles.RoleName -contains $Role ) {
+                    Write-Debug "Role: $Role"
+                    Write-Debug "Index: $($EligiblePIMRoles.RoleName.Indexof( $Role ))"
+                    $selectedIndices.Add(
+                        ( $EligiblePIMRoles.RoleName.Indexof( $Role ) )
+                    )
+                } else {
                     Write-Error "Specified role`"$Role`" is not in eligibile roles`""
                     break
                 }
@@ -87,7 +96,7 @@ function Request-PIMActivation {
             break
         }
 
-        if ( -not $All -or -not $Roles ) {
+        if ( -not ( $All -or ( $selectedIndices.count -gt 0 ) ) ) {
             # Show eligible roles
             Write-Information -MessageData "`nEligible Roles:" -InformationAction Continue
             $RoleIndex = 1
@@ -118,7 +127,7 @@ function Request-PIMActivation {
 
             # Convert to int and subtract 1
             $selectedIndices = $selectedIndices | ForEach-Object { [int]$_ - 1 }
-        } else {
+        } elseif ( $All ) {
             $selectedIndices = $EligiblePIMRoles.Index
         }
 
@@ -149,8 +158,11 @@ function Request-PIMActivation {
             Write-Debug $ActivationParams
 
             try {
-                New-MgRoleManagementDirectoryRoleAssignmentScheduleRequest -BodyParameter $ActivationParams -ErrorAction Stop | Out-Null
-                Write-Information -MessageData "Activated role: $($selectedRole.RoleName)" -InformationAction Continue
+                $ActivationResult = New-MgRoleManagementDirectoryRoleAssignmentScheduleRequest -BodyParameter $ActivationParams -ErrorAction Stop
+                Write-Information -MessageData "$($selectedRole.RoleName): $($ActivationResult.Status)" -InformationAction Continue
+                # Calculate expiry
+                $ExpiryDate = $ActivationResult.CreatedDateTime.AddMinutes( (Get-TimeZone).BaseUTcOffset.TotalMinutes + ( $Duration * 60 ) )
+                Write-Information -MessageData "Expires: $ExpiryDate" -InformationAction Continue
             } catch {
                 Write-Error "Unable to activate role: $($selectedRole.RoleName)"
                 Write-Error $_.Exception.Message
