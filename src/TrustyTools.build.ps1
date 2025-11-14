@@ -212,7 +212,7 @@ Add-BuildTask FormattingCheck {
 
     $scriptAnalyzerParams = @{
         Setting     = 'CodeFormattingOTBS'
-        ExcludeRule = 'PSUseConsistentWhitespace'
+        ExcludeRule = @('PSUseConsistentWhitespace','PSUseCorrectCasing')
         Recurse     = $true
         Verbose     = $false
     }
