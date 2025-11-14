@@ -52,7 +52,8 @@ function Request-PIMActivation {
     )
 
     BEGIN {
-        $PIMPath = Join-Path -Path ( Split-Path $Profile ) -ChildPath "PIMs" -AdditionalChildPath "eligible_roles.json"
+        $PIMPath = Join-Path -Path ( Split-Path $Profile ) -ChildPath "PIMs"
+        $PIMPath = Join-Path -Path $PIMPath -ChildPath "eligible_roles.json"
         if ( -not ( Test-Path $PIMPath ) ) {
             Write-Error "No eligible PIM roles found"
             if ( -not $TenantId ) {
